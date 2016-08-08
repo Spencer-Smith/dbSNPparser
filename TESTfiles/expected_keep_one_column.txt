@@ -1,0 +1,10 @@
+color
+blue
+red
+orange
+black
+teal
+silver
+outofspace
+green
+purple

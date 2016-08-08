@@ -1,0 +1,10 @@
+number	word	color
+83	hello	blue
+492	cordial	red
+029	ephemeral	orange
+67	zephyr	black
+17	dormant	teal
+35	rigid	silver
+22	external	outofspace
+6	boop	green
+39	first	purple
