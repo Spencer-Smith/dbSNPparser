@@ -31,24 +31,24 @@ class Parser:
 
     def SetFileNames(self):
         self.FreqByPopPath = self.Dir + "AlleleFreqBySsPop.bcp"
-        self.FreqByPopHalfPath = self.Dir + "intermediates\FBP.half.bcp"
-        self.FreqByPopCondensedPath = self.Dir + "intermediates\FBP.cond.bcp"
-        self.FreqByPopOutPath = self.Dir + "AlleleFreqBySsPop.Parsed.bcp"
+        self.FreqByPopHalfPath = "intermediates\FBP.half.bcp"
+        self.FreqByPopCondensedPath = "intermediates\FBP.cond.bcp"
+        self.FreqByPopOutPath = self.Out + "AlleleFreqBySsPop.Parsed.bcp"
 
         self.SNPSubSNPPath = self.Dir + "SNPSubSNPLink.bcp"
-        self.SNPSubSNPHalfPath = self.Dir + "intermediates\SSS.half.bcp"
-        self.SNPSubSNPOutPath = self.Dir + "SNPSubSNPLink.Parsed.bcp"
+        self.SNPSubSNPHalfPath = "intermediates\SSS.half.bcp"
+        self.SNPSubSNPOutPath = self.Out + "SNPSubSNPLink.Parsed.bcp"
 
         #THIS FILENAME MAY CHANGE WITH LATER BUILDS FROM dbSNP
         self.ContigPath = self.Dir + "b147_SNPContigLocusId_107.bcp"
-        self.ContigHalfPath = self.Dir + "intermediates\Contig.half.bcp"
-        self.ContigOutPath = self.Dir + "SNPContigLocusId.Parsed.bcp"
+        self.ContigHalfPath = "intermediates\Contig.half.bcp"
+        self.ContigOutPath = self.Out + "SNPContigLocusId.Parsed.bcp"
 
         self.AlleleFreqPath = self.Dir + "SNPAlleleFreq_TGP.bcp"
-        self.AlleleFreqOutPath = self.Dir + "SNPAlleleFreq.Parsed.bcp"
+        self.AlleleFreqOutPath = self.Out + "SNPAlleleFreq.Parsed.bcp"
 
         self.AllelePath = self.Dir + "Allele.bcp"
-        self.AlleleOutPath = self.Dir + "Allele.Parsed.bcp"
+        self.AlleleOutPath = self.Out + "Allele.Parsed.bcp"
 
     def FirstFilterFreqPop(self):
         ## 1
@@ -217,7 +217,7 @@ class Parser:
         OutHandle.close()
 
     def ParseCommandLine(self, Arguments):
-        (Options, Args) = getopt.getopt(Arguments, "d:")
+        (Options, Args) = getopt.getopt(Arguments, "d:o:")
         OptionsSeen = {}
         for (Option, Value) in Options:
             OptionsSeen[Option] = 1
@@ -226,8 +226,14 @@ class Parser:
                     print ("  ERROR: could not find directory, %s"%Value)
                     sys.exit(1)
                 self.Dir = Value
+            if Option == "-o":
+                if not os.path.exists(Value):
+                    print ("  ERROR: could not find output directory, %s"%Value)
+                    sys.exit(1)
+                self.Out = Value
         if not "-d" in OptionsSeen.keys():
-            self.Dir = ""
+            self.Dir = "unparsed\\"
+            self.Out = "parsed\\"
 
 if __name__ == "__main__":
     eggo = Parser()
