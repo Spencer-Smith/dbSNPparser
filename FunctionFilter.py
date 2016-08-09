@@ -34,7 +34,7 @@ class FunctionFilter:
     def CreateHeader(self):
         #This knowledge came from dbSNP's documentation. Link:
         #	http://www.ncbi.nlm.nih.gov/SNP/snp_db_table_description.cgi?t=SNPContigLocusId
-        returnString = "SNP_ID\tGene\tProt_Acc\tFxn_Class\tAllele\tResidue\tAA_Pos\n"
+        returnString = "SNP_ID\tGene\tProt_Acc\tFunction\tAllele\tResidue\tAA_Pos\n"
         return returnString
 
     def ReverseCompliment(self, nucleotides):

@@ -20,8 +20,8 @@
 import os
 import sys
 import getopt
-import Juicer
-import FunctionFilter
+import juicer
+import functionfilter
 
 class Parser:
 
@@ -66,7 +66,7 @@ class Parser:
         self.Carnicero(self.FreqByPopPath,self.FreqByPopHalfPath, columns, AcceptablePopulations, 1, header)
 
         ## 2
-        juice = Juicer.Juicer(self.FreqByPopHalfPath, self.FreqByPopCondensedPath)
+        juice = juicer.Juicer(self.FreqByPopHalfPath, self.FreqByPopCondensedPath)
         juice.Main()
 
     def FirstFilterSNPSubSNP(self):
@@ -87,7 +87,7 @@ class Parser:
         ## 5
         #This script is used to reduce the SNPContigLocusID table to only include entries whose
         # minor alleles have a significant change in function
-        funfil = FunctionFilter.FunctionFilter(self.ContigPath, self.ContigHalfPath)
+        funfil = functionfilter.FunctionFilter(self.ContigPath, self.ContigHalfPath)
         funfil.Main()
 
         ## 6
