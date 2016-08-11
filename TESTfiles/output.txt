@@ -1,0 +1,7 @@
+number	word	place	color
+83	hello	LA	blue
+029	ephemeral	cordoba	orange
+67	zephyr	praug	black
+22	external	kadath	outofspace
+6	boop	lynden	green
+39	first	tokyo	purple

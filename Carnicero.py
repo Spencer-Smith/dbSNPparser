@@ -23,7 +23,7 @@ import getopt
 import juicer
 import functionfilter
 
-class Parser:
+class Carnicero:
 
     def __init__(self):
         self.ParseCommandLine(sys.argv[1:])

@@ -2,16 +2,16 @@
 
 import unittest
 import os
-import Parser
-import Juicer
-import FunctionFilter
+import Carnicero
+import juicer
+import functionfilter
 
 class ParserTestCase(unittest.TestCase):
 
 	def setUp(self):
-		self.parser = Parser.Parser()
-		self.juicer = Juicer.Juicer("","")
-		self.funfil = FunctionFilter.FunctionFilter("","")
+		self.parser = Carnicero.Carnicero()
+		self.juicer = juicer.Juicer("","")
+		self.funfil = functionfilter.FunctionFilter("","")
 		self.funfil.SetFunctionCodes()
 		self.output = "TESTfiles\output.txt"
 
@@ -48,56 +48,56 @@ class ParserTestCase(unittest.TestCase):
 		path = "TESTfiles\TEST_two_column_file.txt"
 		self.assertEqual(self.parser.Dictator(path,1), expectedDictionary)
 
-	#The Carnicero method reads in a file, and parses out only the desired columns. Each row can 
+	#The Cut method reads in a file, and parses out only the desired columns. Each row can 
 		# have a column compared against a dictionary of acceptable values, excluding those rows
 		# which do not meet the criteria. The remaining columns of each row are printed to an
 		# output file. A passed header is passed, it will be output first to the output file, 
 		# however if the Header argument is left as an empty string (""), then the first line of 
 		# the input file will be considered a header and written to the output file
-		# Prototype: Carnicero(InPath, OutPath, ColumnsToKeep, DictionaryOfAcceptableValues,
+		# Prototype: Cut(InPath, OutPath, ColumnsToKeep, DictionaryOfAcceptableValues,
 		# 							ColumnToChallengeDictionary, Header)
 
 	def test_cut_one_column(self):
-		"""Can the carnicero method keep all but one column?"""
+		"""Can the cut method keep all but one column?"""
 		path = "TESTfiles\TEST_table.txt"
 		columns = [0,1,3]
 		dictionary = {"blue":1,"red":1,"orange":1,"black":1,"teal":1,"silver":1,"outofspace":1,"green":1,"purple":1}
 		col = 3
 		header = "number\tword\tcolor\n"
-		self.parser.Carnicero(path,self.output,columns,dictionary,col,header)
+		self.parser.Cut(path,self.output,columns,dictionary,col,header)
 		expected = "TESTfiles\expected_cut_one_column.txt"
 		self.assertTrue(self.checkmywork(self.output, expected), msg="Output not equal to expected")
 
 	def test_keep_one_column(self):
-		"""Can the carnicero method keep only one column?"""
+		"""Can the cut method keep only one column?"""
 		path = "TESTfiles\TEST_table.txt"
 		columns = [3]
 		dictionary = {"blue":1,"red":1,"orange":1,"black":1,"teal":1,"silver":1,"outofspace":1,"green":1,"purple":1}
 		col = 3
 		header = "color\n"
-		self.parser.Carnicero(path,self.output,columns,dictionary,col,header)
+		self.parser.Cut(path,self.output,columns,dictionary,col,header)
 		expected = "TESTfiles\expected_keep_one_column.txt"
 		self.assertTrue(self.checkmywork(self.output, expected), msg="Output not equal to expected")
 
 	def test_limit_by_dictionary(self):
-		"""Can the carnicero method remove rows with a value not pertaining to a dictionary?"""
+		"""Can the cut method remove rows with a value not pertaining to a dictionary?"""
 		path = "TESTfiles\TEST_table.txt"
 		columns = [0,1,2,3]
 		dictionary = {"blue":1,"orange":1,"black":1,"outofspace":1,"green":1,"purple":1}
 		col = 3
 		header = "number\tword\tplace\tcolor\n"
-		self.parser.Carnicero(path,self.output,columns,dictionary,col,header)
+		self.parser.Cut(path,self.output,columns,dictionary,col,header)
 		expected = "TESTfiles\expected_limit_by_dictionary.txt"
 		self.assertTrue(self.checkmywork(self.output, expected), msg="Output not equal to expected")
 
 	def test_cut_two_columns_limit_by_dictionary(self):
-		"""Can the carnicero method cut and limit at the same time?"""
+		"""Can the cut method cut and limit at the same time?"""
 		path = "TESTfiles\TEST_table.txt"
 		columns = [1,2]
 		dictionary = {"ephemeral":1,"zephyr":1,"cordial":1,"external":1}
 		col = 1
 		header = "word\tplace\n"
-		self.parser.Carnicero(path,self.output,columns,dictionary,col,header)
+		self.parser.Cut(path,self.output,columns,dictionary,col,header)
 		expected = "TESTfiles\expected_cut_two_columns_limit_by_dictionary.txt"
 		self.assertTrue(self.checkmywork(self.output, expected), msg="Output not equal to expected")
 
