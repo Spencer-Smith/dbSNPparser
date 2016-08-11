@@ -1,7 +1,7 @@
 #The function of this Python script is to parse down the .bcp files downloaded from dbSNP which
 # are relevant to the Universal Clincal Assay project. The main method uses the following steps
 # to cut down each file:
-    # 1. Filter AlleleFreqBySsPop.bcp by pop_ids using Carnicero method
+    # 1. Filter AlleleFreqBySsPop.bcp by pop_ids using Cut method
     # 2. Condense the result of (1) using the Juicer script
     # 3. Create a dictionary of SubSNP_IDs found in the result of (2)
     # 4. Filter SNPSubSNPLink.bcp using the dictionary from (3)
@@ -63,7 +63,7 @@ class Parser:
         columns = [0,1,2,5]
         header = "SubSNP_ID\tPop_ID\tAllele_ID\tFreq\n"
         # [1] is the column we will filter by, as it contains the pop_ids
-        self.Carnicero(self.FreqByPopPath,self.FreqByPopHalfPath, columns, AcceptablePopulations, 1, header)
+        self.Cut(self.FreqByPopPath,self.FreqByPopHalfPath, columns, AcceptablePopulations, 1, header)
 
         ## 2
         juice = juicer.Juicer(self.FreqByPopHalfPath, self.FreqByPopCondensedPath)
@@ -81,7 +81,7 @@ class Parser:
         columns = [0,1]
         header = "SubSNP_ID\tSNP_ID\n"
         # Filter by [0], contains subsnp_ids
-        self.Carnicero(self.SNPSubSNPPath, self.SNPSubSNPHalfPath, columns, AcceptableSubSNPs, 0, header)
+        self.Cut(self.SNPSubSNPPath, self.SNPSubSNPHalfPath, columns, AcceptableSubSNPs, 0, header)
 
     def FilterContig(self):
         ## 5
@@ -96,7 +96,7 @@ class Parser:
         ## 7
         #Because we've already reduced the columns, we'll keep all 10 of them
         columns = [0,1,2,3,4,5,6]
-        self.Carnicero(self.ContigHalfPath, self.ContigOutPath, columns, AcceptableSNPs, 0, "")
+        self.Cut(self.ContigHalfPath, self.ContigOutPath, columns, AcceptableSNPs, 0, "")
 
     def SecondFilterSNPSubSNP(self):
         ## 8
@@ -105,7 +105,7 @@ class Parser:
         ## 9
         #Keep both columns
         columns = [0,1]
-        self.Carnicero(self.SNPSubSNPHalfPath, self.SNPSubSNPOutPath, columns, AcceptableSNPs, 1, "")
+        self.Cut(self.SNPSubSNPHalfPath, self.SNPSubSNPOutPath, columns, AcceptableSNPs, 1, "")
 
     def SecondFilterFreqPop(self):
         ## 10
@@ -114,7 +114,7 @@ class Parser:
         ## 11
         #Keep all the columns
         columns = [0,1,2,3,4,5,6]
-        self.Carnicero(self.FreqByPopCondensedPath, self.FreqByPopOutPath, columns, AcceptableSubSNPs, 0, "")
+        self.Cut(self.FreqByPopCondensedPath, self.FreqByPopOutPath, columns, AcceptableSubSNPs, 0, "")
 
     def FilterAlleleFreq(self):
         ## 12
@@ -131,7 +131,7 @@ class Parser:
             #[2] is freq, the allele frequency
         columns = [0,1,2]
         header = "SNP_ID\tAllele_ID\tFreq\n"
-        self.Carnicero(self.AlleleFreqPath, self.AlleleFreqOutPath, columns, AcceptableSNPs, 0, header)
+        self.Cut(self.AlleleFreqPath, self.AlleleFreqOutPath, columns, AcceptableSNPs, 0, header)
 
     def FilterAllele(self):
         ## 14
@@ -144,7 +144,7 @@ class Parser:
             #[1] is allele, the actual nucleotides of the allele_id
         columns = [0,1,4]
         header = "Allele_ID\tAllele\tInverseID\n"
-        self.Carnicero(self.AllelePath,self.AlleleOutPath, columns, AcceptableAlleles, 0, header)
+        self.Cut(self.AllelePath,self.AlleleOutPath, columns, AcceptableAlleles, 0, header)
 
     def Main(self):
         #This method goes through the specific parsing steps necessary to
@@ -174,7 +174,7 @@ class Parser:
         Handle.close()
         return toReturn
 
-    def Carnicero(self, InPath, OutPath, columns, dictionary, FilterColumn, header):
+    def Cut(self, InPath, OutPath, columns, dictionary, FilterColumn, header):
         #Parses columns and filters rows based on given criteria
         Handle = open(InPath, 'r')
         OutHandle = open(OutPath, 'w')

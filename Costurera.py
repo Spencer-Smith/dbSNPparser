@@ -1,11 +1,14 @@
 #Makes the SQLite database from 
 
+import sys
+import os
 import database
 import databasemaker
 
 class SQLiter:
 
 	def __init__(self):
+		self.ParseCommandLine(sys.argv[1:])
 		self.dbName = "SNP.db"
 		self.directory = "parsed\\"
 
@@ -24,7 +27,8 @@ class SQLiter:
 		self.Unity()
 		self.Minor()
 		self.Variance()
-		#self.CleanUp()
+		if not self.NoClean:
+			self.CleanUp()
 
 	def Unity(self):
 		command = "CREATE TABLE fulltable as SELECT snpcontiglocusid.snp_id, prot_acc, aa_pos,"
@@ -60,6 +64,31 @@ class SQLiter:
 		self.database.ExecuteCommand(command)
 		command = "DROP TABLE snpsubsnplink"
 		self.database.ExecuteCommand(command)
+		command = "DROP TABLE minoralleles"
+		self.database.ExecuteCommand(command)
+		command = "VACUUM"
+		self.database.ExecuteCommand(command)
+
+	def ParseCommandLine(self, Arguments):
+		(Options, Args) = getopt.getopt(Arguments, "i:o:nc")
+		OptionsSeen = {}
+		for (Option, Value) in Options:
+			OptionsSeen[Option] = 1
+			if Option == "-i":
+				if not os.path.exists(Value):
+					print ("  ERROR: could not find input directory, %s"%Value)
+					sys.exit(1)
+				self.directory = Value
+			if Option == "-o":
+				self.dbName = Value		
+			if Option == "-nc":
+				self.NoClean = True
+		if not "-i" in OptionsSeen.keys():
+			self.directory = "parsed\\"
+		if not "-o" in OptionsSeen.keys():
+			self.Out = "parsed\\"
+		if not "-nc" in OptionsSeen.keys():
+			self.NoClean = False
 
 if __name__ == "__main__":
 	amigo = SQLiter()
