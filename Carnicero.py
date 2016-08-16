@@ -236,5 +236,5 @@ class Carnicero:
             self.Out = "parsed\\"
 
 if __name__ == "__main__":
-    eggo = Parser()
+    eggo = Carnicero()
     eggo.Main()

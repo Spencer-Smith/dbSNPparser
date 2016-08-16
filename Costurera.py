@@ -91,5 +91,5 @@ class SQLiter:
 			self.NoClean = False
 
 if __name__ == "__main__":
-	amigo = SQLiter()
+	amigo = Costurera()
 	amigo.Main()
